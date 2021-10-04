@@ -24,10 +24,10 @@ class Users(BaseModel):
                 try:
                     valid = validate_email(email)
                 except EmailNotValidError:
-                    raise ValueError(f"{email} isn't valid")
+                    raise ValueError(f"{email} isn't valid email")
         else:
             try:
                 valid = validate_email(value)
             except EmailNotValidError:
-                raise ValueError(f"{value} isn't valid")
+                raise ValueError(f"{value} isn't valid email")
         return value

@@ -8,4 +8,4 @@ def start_bot(app, instance):
     client = slack.WebClient(instance.token)
     bot_id = client.api_call('auth.test')['user_id']
 
-    return bot_id
+    return client, bot_id
