@@ -23,8 +23,11 @@ class Send:
         msg['Subject'] = 'HelloBot is saying hi!'
         return msg
 
-    @staticmethod
-    async def send(server, msg, body, user):
+    #@staticmethod
+    async def send(self, body, user):
+        msg = self.message()
+        server = self.start()
         msg['To'] = user
         msg.attach(MIMEText(body))
         server.send_message(msg)
+        server.quit()

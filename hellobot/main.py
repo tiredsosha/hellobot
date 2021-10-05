@@ -1,9 +1,9 @@
-from aiohttp.web_routedef import post
+from slackeventsapi import SlackEventAdapter
 import yaml
 
 from aiohttp import web
 
-from hellobot.bot.events import start_bot
+from hellobot.bot.events import Events
 from hellobot.responce.chat import Requests
 from hellobot.entities.email import Email
 from hellobot.entities.user import Users
@@ -17,6 +17,13 @@ with open('configs/email.yaml') as email:
     email = Email(**yaml.safe_load(email))
 
 
+def connect_bot(app):
+    bot = Bot
+    event_handler = SlackEventAdapter(bot.singing, bot.endpoint, app)
+    event = Events(app, bot)
+    return event
+
+
 def main(data):
     app = web.Application()
     app.add_routes([
@@ -25,9 +32,6 @@ def main(data):
     ])
     app = web.Application()
     web.run_app(app, host='10.0.22.215', port=5000)
-
-    bot = Bot
-    bot_id = start_bot(app, bot)
 
     mail = Send(data.username, data.password, data.smtp_server, data.smtp_port)
     e_server = mail.start()
