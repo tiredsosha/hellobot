@@ -1,5 +1,6 @@
 from pydantic import BaseModel, validator
-from email_validator import validate_email, EmailNotValidError
+import yaml
+import re
 
 
 class Users(BaseModel):
@@ -22,12 +23,25 @@ class Users(BaseModel):
         if isinstance(value, list):
             for email in value:
                 try:
-                    valid = validate_email(email)
-                except EmailNotValidError:
+                    email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', email).group()
+                except AttributeError:
                     raise ValueError(f"{email} isn't valid email")
         else:
             try:
-                valid = validate_email(value)
-            except EmailNotValidError:
+                email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', value).group()
+            except AttributeError:
                 raise ValueError(f"{value} isn't valid email")
         return value
+
+
+with open('configs/user.yaml') as users:
+    users = Users(**yaml.safe_load(users))
+
+email = 'p@gmail.com'
+
+for it in users:
+    if email in it[1]:
+        key = it[0]
+    else:
+        key = 'no'
+    print(key)

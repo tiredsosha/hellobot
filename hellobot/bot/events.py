@@ -36,18 +36,27 @@ class Events:
             self.client.chat_postMessage(channel=f'{self.user}', text=text)
 
     async def email_validator(data):
-        try:  # take email from payload
+        try:
             email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', data).group()
         except AttributeError:
             email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', data)
         return email
 
     async def email_true(self, text):
-        if text in self.emails:
+        for pair in self.creds:
+            if text in pair[1]:
+                key = pair[0]
+                break
+            else:
+                key = None
+
+        if key:
             await self.passwork()
             body = f'Лови логин и пароль для passwork\n{user_pass}'
             self.tasks.append(asyncio.create_task(self.replay(text)))
-            self.tasks.append(asyncio.create_task(Send.send(self.msg, self.server, body=, user=)))
+            self.tasks.append(
+                asyncio.create_task(
+                    Send.send(self.msg, self.server, body=body, user=text)))
         else:
             await self.error()
 

@@ -1,5 +1,6 @@
+import re
+
 from pydantic import BaseModel, validator
-from email_validator import validate_email, EmailNotValidError
 
 
 class Email(BaseModel):
@@ -11,7 +12,7 @@ class Email(BaseModel):
     @validator('username')
     def email(cls, value):
         try:
-            valid = validate_email(value)
-        except EmailNotValidError:
+            email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', value).group()
+        except AttributeError:
             raise ValueError(f"{value} isn't valid email")
         return value
