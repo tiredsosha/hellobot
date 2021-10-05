@@ -43,7 +43,7 @@ class Events:
         return email
 
     async def email_true(self, text):
-        for pair in self.creds:
+        for pair in self.instance:
             if text in pair[1]:
                 key = pair[0]
                 break
@@ -51,8 +51,10 @@ class Events:
                 key = None
 
         if key:
+            username = self.creds[key].username
+            password = self.creds[key].password
             await self.passwork()
-            body = f'Лови логин и пароль для passwork\n{user_pass}'
+            body = f'Лови логин и пароль для passwork\nЛогин: {username}\nПароль: {password}'
             self.tasks.append(asyncio.create_task(self.replay(text)))
             self.tasks.append(
                 asyncio.create_task(
