@@ -35,7 +35,7 @@ class Events:
         if self.user != None and self.bot_id != self.user:
             self.client.chat_postMessage(channel=f'{self.user}', text=text)
 
-    def email_validator(data):
+    def email_validator(self, data):
         try:
             email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', data).group()
         except AttributeError:
@@ -69,7 +69,7 @@ class Events:
                 break
         for key in self.humores:
             if key in text:
-                self.humor()
+                asyncio.run(self.humor())
                 break
         for key in self.helloes:
             if key in text:
@@ -93,11 +93,11 @@ class Events:
     def hello(self):
         print('hello stage')
         text = '''Привет, я Hello бот!
-        Пока я умею только давать пароль от пассворка и могу рассказать анекдот
-        Отправь мне свою рабочую почту или напиши "Хочу анекдот"'''
+Пока я умею только давать пароль от пассворка и могу рассказать анекдот
+Отправь мне свою рабочую почту или напиши "Хочу анекдот"'''
         self.replay(text)
 
-    def humor(self):
+    async def humor(self):
         print('humor stage')
         with aiohttp.ClientSession() as session:
             with session.get('https://baneks.ru/random') as resp:
