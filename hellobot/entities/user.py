@@ -32,16 +32,3 @@ class Users(BaseModel):
             except AttributeError:
                 raise ValueError(f"{value} isn't valid email")
         return value
-
-
-with open('configs/user.yaml') as users:
-    users = Users(**yaml.safe_load(users))
-
-email = 'p@gmail.com'
-
-for it in users:
-    if email in it[1]:
-        key = it[0]
-    else:
-        key = 'no'
-    print(key)

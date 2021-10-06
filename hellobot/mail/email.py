@@ -12,6 +12,8 @@ class Send:
         self.port = port
 
     def start(self):
+        print('email stage')
+        print(self.admin, self.password)
         server = smtplib.SMTP(self.server, self.port)
         server.starttls()
         server.login(self.admin, self.password)
