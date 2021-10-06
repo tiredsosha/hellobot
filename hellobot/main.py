@@ -1,3 +1,4 @@
+import asyncio
 from slackeventsapi import SlackEventAdapter
 import yaml
 
@@ -26,9 +27,9 @@ def connect_bot(app, msg, server, creds):
     event_handler = SlackEventAdapter(bot.singing, bot.endpoint, app)
     event = Events(app, creds, bot, msg, server)
 
-    @event_handler
-    async def messages():
-        await event.message()
+    @event_handler.on('message')
+    async def messages(payload):
+        await event.message(payload)
 
 
 def main(data, creds):
@@ -42,6 +43,7 @@ def main(data, creds):
     e_msg = mail.message()
 
     connect_bot(app, e_msg, e_server, creds)
+    asyncio.get_event_loop()
 
 
 if __name__ == "__main__":
