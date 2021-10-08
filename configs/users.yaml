@@ -13,6 +13,12 @@ developers:
   - m.bondin@hello.io
   - o.korabenkov@hello.io
   - o.chernenko@hello.io
+  - y.panaev@hello.io
+  - n.sokolov@hello.io
+  - g.bychenok@hello.io
+  - v.tuleneva@hello.io
+  - a.sadykov@hello.io
+  - a.frolov@hello.io
 designers:
   - a.zhigalov@hello.io
   - a.glinskiy@hello.io
@@ -33,9 +39,12 @@ designers:
   - s.prihodko@hello.io
   - t.samarakovskaya@hello.io
   - j.artamonova@hello.io
+  - m.rube@hello.io
+  - m.korotkina@hello.io
 finance:
   - e.nikolayeva@hello.io
   - ot@hello.io
+  - a.kaloeva@hello.io
 tech:
   - support.team@hello.io
   - a.bystrov@hello.io
@@ -45,6 +54,7 @@ tech:
   - i.kondratiev@hello.io
   - n.brovchenko@hello.io
   - n.berezhnoy@hello.io
+  - a.urlapov@hello.io
 marketing:
   - a.chernov@hello.io
   - a.zavyalov@hello.io
@@ -71,7 +81,7 @@ admin:
 office:
   - n.muravieva@hello.io
 hr:
-  - test@hello.io
+  - a.egorova@hello.io
 test:
   - polina28113@mail.ru
   - sasha.che007@gmail.com

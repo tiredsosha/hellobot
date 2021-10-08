@@ -31,27 +31,25 @@ def connect_bot(app, creds, users, mail):
             asyncio.run(event.message(payload))
 
 
-def main(data, creds, users):
+def main():
+    with open('configs/users.yaml') as users:
+        users = Users(**yaml.safe_load(users))
+    with open('configs/email.yaml') as email:
+        email = Email(**yaml.safe_load(email))
+    with open('configs/credentials.yaml') as creds:
+        creds = from_dict(yaml.safe_load(creds))
+
     app = Flask(__name__)
 
     @app.route('/slack')
     def for_lool(request):
         return "ты чмырь"
 
-    mail = Send(data.username, data.password, data.smtp_server, data.smtp_port)
+    mail = Send(email.username, email.password, email.smtp_server,
+                email.smtp_port)
 
     connect_bot(app, creds, users, mail)
     app.run(host="10.0.22.215", port=5000, debug=False)
 
 
-if __name__ == "__main__":
-    with open('configs/users.yaml') as users:
-        users = Users(**yaml.safe_load(users))
-
-    with open('configs/email.yaml') as email:
-        email = Email(**yaml.safe_load(email))
-
-    with open('configs/credentials.yaml') as creds:
-        creds = from_dict(yaml.safe_load(creds))
-
-    main(email, creds, users)
+main()

@@ -1,5 +1,6 @@
-from pydantic import BaseModel, validator
 import re
+
+from pydantic import BaseModel, validator
 
 
 class Users(BaseModel):

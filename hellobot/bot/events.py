@@ -1,6 +1,6 @@
-import slack
 import re
 import requests
+import slack
 
 from bs4 import BeautifulSoup
 
