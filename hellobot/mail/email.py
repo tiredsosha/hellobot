@@ -10,14 +10,15 @@ class Send:
         self.password = password
         self.server = server
         self.port = port
+        self.handle = None
+        self.start()
 
     def start(self):
-        print('email stage')
         print(self.admin, self.password)
         server = smtplib.SMTP(self.server, self.port)
         server.starttls()
         server.login(self.admin, self.password)
-        return server
+        self.handle = server
 
     def message(self):
         msg = MIMEMultipart()
@@ -25,8 +26,8 @@ class Send:
         msg['Subject'] = 'HelloBot is saying hi!'
         return msg
 
-    @staticmethod
-    async def send(msg, server, body, user):
+    async def send(self, body, user):
+        msg = self.message()
         msg['To'] = user
         msg.attach(MIMEText(body))
-        server.send_message(msg)
+        self.handle.send_message(msg)

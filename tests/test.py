@@ -1,27 +1,44 @@
-import serial
+import smtplib
+import asyncio
+import time
 
-ser = serial.Serial('/dev/ttyAMA0', 38400)
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
-try:
-    while 1:
-        # Read one line from the serial buffer
-        line = ser.readline().decode('utf-8')
 
-        # Remove the trailing carriage return line feed
-        line = line[:-2]
+class Send:
+    def __init__(self):
+        self.admin = 'soshapinger@gmail.com'
+        self.password = 'qwertyty5477'
+        self.server = 'smtp.gmail.com'
+        self.port = 587
+        self.handle = None
+        self.start()
 
-        # Create an array of the data
-        Z = line.split(' ')
+    def start(self):
+        print(self.admin, self.password)
+        server = smtplib.SMTP(self.server, self.port)
+        server.starttls()
+        server.login(self.admin, self.password)
+        self.handle = server
 
-        # Print it nicely
-        if len(Z) > 15:
-            print("----------")
-            print("          \tCT1\tCT2\tCT3")
-            print("RealPower:\t%s\t%s\t%s" % (Z[1], Z[6], Z[11]))
-            print("AppaPower:\t%s\t%s\t%s" % (Z[2], Z[7], Z[12]))
-            print("Irms     :\t%s\t%s\t%s" % (Z[3], Z[8], Z[13]))
-            print("Vrms     :\t%s\t%s\t%s" % (Z[4], Z[9], Z[14]))
-            print("PowerFact:\t%s\t%s\t%s" % (Z[5], Z[10], Z[15]))
+    def message(self):
+        msg = MIMEMultipart()
+        msg['From'] = self.admin
+        msg['Subject'] = 'HelloBot is saying hi!'
+        return msg
 
-except KeyboardInterrupt:
-    ser.close()
+    async def send(self, body, user):
+        msg = self.message()
+        msg['To'] = user
+        msg.attach(MIMEText(body))
+        self.handle.send_message(msg)
+
+
+m = Send()
+
+while True:
+    asyncio.run(m.send('dddddddddd', 'sasha.che007@gmail.com'))
+    asyncio.run(m.send('dddddddddd', 'a.chichko@hello.io'))
+    print('here')
+    time.sleep(10)
