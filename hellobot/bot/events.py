@@ -60,11 +60,11 @@ class Events:
             text = 'Китайские дети утром делают зарядку, а вечером относят её в "Евросеть"'
         self.replay(text)
 
-    def passwork(self, username, password):
+    def passwork(self, email, username, password, master_pass):
         text = 'Кинул тебе пароль от пассворка на почту'
         self.replay(text)
-        body = f'Лови логин и пароль для passwork\nЛогин: {username}\nПароль: {password}'
-        self.mail.send(body=body, user=text)
+        body = f'Лови логин и пароль для passwork\nЛогин: {username}\nПароль: {password}\nМастер-пароль: {master_pass}(вводить вторым)'
+        self.mail.send(body=body, user=email)
 
     def error(self):
         text = 'Такой почты нет в моей базе, перепроверь ее написание, пожалуйста\nЕсли ошибка возникает не первый раз напиши Артему Паламарчуку'
@@ -77,10 +77,10 @@ class Events:
             email = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', data)
         return email
 
-    def email_true(self, text):
+    def email_true(self, email):
         for pair in self.users_data:
             print(pair)
-            if text in pair[1]:
+            if email in pair[1]:
                 key = pair[0]
                 break
             else:
@@ -88,7 +88,8 @@ class Events:
         if key:
             username = self.creds[key].username
             password = self.creds[key].password
-            self.passwork(username, password)
+            master_pass = self.creds[key].master
+            self.passwork(email, username, password, master_pass)
         else:
             self.error()
 

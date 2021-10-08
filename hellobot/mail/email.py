@@ -26,7 +26,7 @@ class Send:
         msg['Subject'] = 'HelloBot is saying hi!'
         return msg
 
-    async def send(self, body, user):
+    def send(self, body, user):
         msg = self.message()
         msg['To'] = user
         msg.attach(MIMEText(body))
