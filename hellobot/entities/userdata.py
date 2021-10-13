@@ -29,7 +29,3 @@ def from_dict(data: dict):
     for k, v in data.items():
         userdata[k] = Userdata(**v)
     return userdata
-
-
-with open('configs/userdata.yaml') as userdata:
-    userdata = from_dict(yaml.safe_load(userdata))

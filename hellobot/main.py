@@ -34,7 +34,7 @@ def main():
     with open('configs/email.yaml') as email:
         email = Email(**yaml.safe_load(email))
     with open('configs/userdata.yaml') as userdata:
-        userdata = from_dict(**yaml.safe_load(userdata))
+        userdata = from_dict(yaml.safe_load(userdata))
 
     app = Flask(__name__)
 
