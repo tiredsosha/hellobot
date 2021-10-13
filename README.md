@@ -1,3 +1,5 @@
+#hellobot
+
 Add log and pass to userdata group
 add users to group
 check out userdata.yaml
