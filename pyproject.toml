@@ -71,7 +71,7 @@ python_files = [
 ]
 
 [tool.poetry.scripts]
-vr = "vr.main:main"
+vr = "hellobot.main:main"
 
 [build-system]
 requires = ["poetry-core^1.0.0", "poetry-dynamic-versioning"]

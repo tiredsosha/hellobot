@@ -14,7 +14,6 @@ class Send:
         self.start()
 
     def start(self):
-        print(self.admin, self.password)
         server = smtplib.SMTP(self.server, self.port)
         server.starttls()
         server.login(self.admin, self.password)

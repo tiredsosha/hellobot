@@ -1,22 +1,21 @@
-import asyncio
-from slackeventsapi import SlackEventAdapter
 import yaml
+import asyncio
 
+from slackeventsapi import SlackEventAdapter
 from flask import Flask
 
 from hellobot.bot.events import Events
 from hellobot.entities.email import Email
-from hellobot.entities.user import Users
 from hellobot.entities.bot import Bot
+from hellobot.entities.userdata import from_dict
 from hellobot.mail.email import Send
-from hellobot.entities.cred import from_dict
 
 
-def connect_bot(app, creds, users, mail):
+def connect_bot(app, userdata, mail):
     tasks = []
     bot = Bot()
     event_handler = SlackEventAdapter(bot.singing, bot.endpoint, app)
-    event = Events(app, creds, bot, users, mail)
+    event = Events(app, bot, userdata, mail)
 
     @event_handler.on('message')
     def messages(payload):
@@ -32,12 +31,10 @@ def connect_bot(app, creds, users, mail):
 
 
 def main():
-    with open('configs/users.yaml') as users:
-        users = Users(**yaml.safe_load(users))
     with open('configs/email.yaml') as email:
         email = Email(**yaml.safe_load(email))
-    with open('configs/credentials.yaml') as creds:
-        creds = from_dict(yaml.safe_load(creds))
+    with open('configs/userdata.yaml') as userdata:
+        userdata = from_dict(**yaml.safe_load(userdata))
 
     app = Flask(__name__)
 
@@ -48,7 +45,7 @@ def main():
     mail = Send(email.username, email.password, email.smtp_server,
                 email.smtp_port)
 
-    connect_bot(app, creds, users, mail)
+    connect_bot(app, userdata, mail)
     app.run(host="10.0.22.215", port=5000, debug=False)
 
 

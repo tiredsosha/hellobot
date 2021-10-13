@@ -6,24 +6,21 @@ from bs4 import BeautifulSoup
 
 
 class Events:
-    def __init__(self, app, creds, instance, users_data, mail):
+    def __init__(self, app, bot, userdata, mail):
         self.app = app
-        self.instance = instance
-        self.creds = creds
+        self.bot = bot
         self.mail = mail
-        self.users_data = users_data
+        self.userdata = userdata
         self.client, self.bot_id = self.start()
         self.user = None
         self.helpers = [
-            'помощ', 'проблем', 'хуйня', 'не работ', 'help', 'помог'
+            'помощ', 'проблем', 'хуйня', 'не работ', 'help', 'помог',
+            'пассворк', 'passwork', '/help'
         ]
         self.humores = ['шутк', 'анек', 'смех', 'юмор']
-        self.helloes = [
-            'прив', 'парол', 'пассворк', 'хранилище', 'доступ', 'passwork'
-        ]
 
     def start(self):
-        client = slack.WebClient(self.instance.token)
+        client = slack.WebClient(self.bot.token)
         bot_id = client.api_call('auth.test')['user_id']
         return client, bot_id
 
@@ -78,17 +75,21 @@ class Events:
         return email
 
     def email_true(self, email):
-        for pair in self.users_data:
-            print(pair)
-            if email in pair[1]:
+        for pair in self.userdata.items():
+            if email in pair[1].users:
                 key = pair[0]
                 break
             else:
                 key = None
+
+        def get_creds(what: str):
+            cred = self.userdata[key].credentials[what]
+            return cred
+
         if key:
-            username = self.creds[key].username
-            password = self.creds[key].password
-            master_pass = self.creds[key].master
+            username = get_creds('username')
+            password = get_creds('password')
+            master_pass = get_creds('master')
             self.passwork(email, username, password, master_pass)
         else:
             self.error()
@@ -103,11 +104,6 @@ class Events:
         for key in self.humores:
             if key in text:
                 self.humor()
-                word = True
-                break
-        for key in self.helloes:
-            if key in text:
-                self.hello()
                 word = True
                 break
         if not word:
