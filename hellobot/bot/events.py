@@ -6,7 +6,6 @@ from random import randint
 from bs4 import BeautifulSoup
 
 
-
 class Events:
     def __init__(self, app, bot, userdata, mail, boys_wisdom, wolf_wisdom):
         self.app = app
