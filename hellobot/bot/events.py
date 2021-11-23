@@ -2,15 +2,19 @@ import re
 import requests
 import slack
 
+from random import randint
 from bs4 import BeautifulSoup
 
 
+
 class Events:
-    def __init__(self, app, bot, userdata, mail):
+    def __init__(self, app, bot, userdata, mail, boys_wisdom, wolf_wisdom):
         self.app = app
         self.bot = bot
         self.mail = mail
         self.userdata = userdata
+        self.boys_wisdom = boys_wisdom
+        self.wolf_wisdom = wolf_wisdom
         self.client, self.bot_id = self.start()
         self.user = None
         self.helpers = [
@@ -18,6 +22,8 @@ class Events:
             'пассворк', 'passwork', '/help'
         ]
         self.humores = ['шутк', 'анек', 'смех', 'юмор']
+        self.boy = ['пацан', 'брат', 'брат,']
+        self.wolf = ['мудрость', 'волк', 'волч']
 
     def start(self):
         client = slack.WebClient(self.bot.token)
@@ -43,8 +49,11 @@ class Events:
 
     def hello(self):
         text = '''Привет, я Hello бот!
-Пока я умею только давать пароль от пассворка и могу рассказать анекдот
-Отправь мне свою рабочую почту или напиши "Хочу анекдот"'''
+Я немного эволюционировал и умею только давать пароль от пассворка, рассказать анекдот, поделиться словом пацана или мудростью волка
+Хочешь попасть в пассворк: отправь мне свою рабочую почту
+Хочешь посмеяться: напиши "Хочу анекдот"
+Хочешь узнать о жизни пацана: напиши "Брат, помоги"
+А если хочешь помудреть: напиши "Поделись мудростью"'''
         self.replay(text)
 
     def humor(self):
@@ -56,6 +65,10 @@ class Events:
         except UnicodeDecodeError:
             text = 'Китайские дети утром делают зарядку, а вечером относят её в "Евросеть"'
         self.replay(text)
+
+    def custom(self, key_dict: dict, irange: tuple):
+        start, stop = irange
+        self.replay(key_dict.get(randint(start, stop)))
 
     def passwork(self, email, username, password, master_pass):
         text = 'Кинул тебе пароль от пассворка на почту'
@@ -81,11 +94,9 @@ class Events:
                 break
             else:
                 key = None
-
         def get_creds(what: str):
             cred = self.userdata[key].credentials[what]
             return cred
-
         if key:
             username = get_creds('username')
             password = get_creds('password')
@@ -104,6 +115,18 @@ class Events:
         for key in self.humores:
             if key in text:
                 self.humor()
+                word = True
+                break
+        for key in self.boy:
+            if key in text:
+                irange = (1, 100)
+                self.custom(self.boys_wisdom, irange)
+                word = True
+                break
+        for key in self.wolf:
+            if key in text:
+                irange = (1, 43)
+                self.custom(self.wolf_wisdom, irange)
                 word = True
                 break
         if not word:

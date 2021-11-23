@@ -11,11 +11,11 @@ from hellobot.entities.userdata import from_dict
 from hellobot.mail.email import Send
 
 
-def connect_bot(app, userdata, mail):
+def connect_bot(app, userdata, mail, boys, wolf):
     tasks = []
     bot = Bot()
     event_handler = SlackEventAdapter(bot.singing, bot.endpoint, app)
-    event = Events(app, bot, userdata, mail)
+    event = Events(app, bot, userdata, mail, boys, wolf)
 
     @event_handler.on('message')
     def messages(payload):
@@ -35,6 +35,10 @@ def main():
         email = Email(**yaml.safe_load(email))
     with open('configs/userdata.yaml') as userdata:
         userdata = from_dict(yaml.safe_load(userdata))
+    with open('configs/boys.yaml') as boys:
+        boys = yaml.safe_load(boys)
+    with open('configs/wolf.yaml') as wolf:
+        wolf = yaml.safe_load(wolf)
 
     app = Flask(__name__)
 
@@ -45,7 +49,7 @@ def main():
     mail = Send(email.username, email.password, email.smtp_server,
                 email.smtp_port)
 
-    connect_bot(app, userdata, mail)
+    connect_bot(app, userdata, mail, boys, wolf)
     app.run(host="10.0.22.215", port=5000, debug=False)
 
 
